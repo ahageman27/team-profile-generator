@@ -85,6 +85,22 @@ const internQuestions = [
     }
 ]
 
+function init() {
+    fs.writeFile("./src/index.html", `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>`
+        , (err) =>
+            err ? console.error(err) : console.log("HTML written succesfully")
+    );
+    addManager();
+}
+
 async function addManager() {
     inquirer.prompt(managerQuestions)
         .then((response) => {
@@ -104,11 +120,10 @@ async function addManager() {
             </div>
             </div>
         `, (err) =>
-                err ? console.error(err) : console.log("README written succesfully")
-            )
+                err ? console.error(err) : console.log("HTML written succesfully")
+            );
             addEmployee();
-        })
-
+        });
 }
 
 
@@ -116,23 +131,25 @@ async function addEmployee() {
     while (!exit) {
 
         await inquirer.prompt(choiceQuestion)
-            .then((response) => {
+            .then(async function (response) {
                 switch (response.continue) {
                     case "Engineer":
-                        addEngineer()
+                        await addEngineer();
                         break;
                     case "Intern":
-                        addIntern()
+                        await addIntern();
                         break;
                     case "Finish":
-                        exit = true
+                        exit = true;
+                        fs.appendFile("./src/index.html", `</body></html>`, (err) =>
+                            err ? console.error(err) : console.log("HTML written succesfully"));
                 }
             })
     }
-}
 
+}
 function addEngineer() {
-    inquirer.prompt(engineerQuestions)
+    return inquirer.prompt(engineerQuestions)
         .then((response) => {
             const engineer = new Engineer(response.engineerName, response.engineerId, response.engineerEmail, response.github)
             fs.appendFile("./src/index.html", `<div class="card">
@@ -149,15 +166,15 @@ function addEngineer() {
                 </div>
             </div>
             </div>`, (err) =>
-                err ? console.error(err) : console.log("README written succesfully"))
+                err ? console.error(err) : console.log("HTML written succesfully"))
         })
 }
 
 function addIntern() {
-    inquirer.prompt(internQuestions)
+    return inquirer.prompt(internQuestions)
         .then((response) => {
             const intern = new Intern(response.internName, response.internId, response.internEmail, response.school)
-            htmlOutput += `<div class="card">
+            fs.appendFile("./src/index.html", `<div class="card">
             <div class="card-content">
                 <div class="media-content">
                     <p class="title is-4"> ${intern.name}</p>
@@ -170,17 +187,10 @@ function addIntern() {
                     </ul>
                 </div>
             </div>
-            </div>`
+            </div>`, (err) =>
+                err ? console.error(err) : console.log("HTML written succesfully"))
         })
 }
 
-function createCard() {
 
-}
-
-function finishTeam() {
-
-}
-
-
-addManager()
+init()
