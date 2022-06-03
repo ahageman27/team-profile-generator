@@ -58,7 +58,7 @@ const engineerQuestions = [
     {
         type: "input",
         name: "github",
-        message: "Please input the engineer's GitHub.",
+        message: "Please input the engineer's GitHub username.",
     },
 ]
 
@@ -92,35 +92,46 @@ function init() {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css" integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>`
+<body>
+<section class="hero is-primary">
+  <div class="hero-body">
+    <p class="title">
+      My Team
+    </p>
+  </div>
+</section>
+<div class="container">
+`
         , (err) =>
-            err ? console.error(err) : console.log("HTML written succesfully")
+            err ? console.error(err) : console.log()
     );
     addManager();
 }
 
-async function addManager() {
+function addManager() {
     inquirer.prompt(managerQuestions)
         .then((response) => {
             const manager = new Manager(response.managerName, response.managerId, response.managerEmail, response.office)
-            fs.appendFile("./src/index.html", `<div class="card">
+            fs.appendFile("./src/index.html", `<div class="card is-primary">
             <div class="card-content">
                 <div class="media-content">
                     <p class="title is-4"> ${manager.name}</p>
-                    <p class="subtitle is-6"> ${manager.email}</p>
+                    <p class="subtitle is-6"> ${manager.getRole()}</p>
                 </div>
                 <div class="content">
-                    <ul>
-                        <li>ID: ${manager.id}</li>
-                        <li>Office Number: ${manager.office}</li>
-                    </ul>
+                    <a href="mailto:${manager.email}">Email: ${manager.email}</a>
+                    <br>
+                    <p>ID: ${manager.id}</p>
+                    <br>
+                    <p>Office Number: ${manager.office}</p>
                 </div>
             </div>
             </div>
         `, (err) =>
-                err ? console.error(err) : console.log("HTML written succesfully")
+                err ? console.error(err) : console.log()
             );
             addEmployee();
         });
@@ -141,7 +152,7 @@ async function addEmployee() {
                         break;
                     case "Finish":
                         exit = true;
-                        fs.appendFile("./src/index.html", `</body></html>`, (err) =>
+                        fs.appendFile("./src/index.html", `</div></body></html>`, (err) =>
                             err ? console.error(err) : console.log("HTML written succesfully"));
                 }
             })
@@ -156,17 +167,17 @@ function addEngineer() {
             <div class="card-content">
                 <div class="media-content">
                     <p class="title is-4"> ${engineer.name}</p>
-                    <p class="subtitle is-6"> ${engineer.email}</p>
-                </div>
+                    <p class subtitle is-6> ${engineer.getRole()}</p>
                 <div class="content">
-                    <ul>
-                        <li>ID: ${engineer.id}</li>
-                        <li>Office Number: ${engineer.github}</li>
-                    </ul>
+                    <a href="mailto:${engineer.email}">Email: ${engineer.email}</a>
+                    <br>
+                    <p>ID: ${engineer.id}</p>
+                    <br>
+                    <a href="https://github.com/${engineer.github}" target="_blank">Github: ${engineer.github}</a>
                 </div>
             </div>
             </div>`, (err) =>
-                err ? console.error(err) : console.log("HTML written succesfully"))
+                err ? console.error(err) : console.log())
         })
 }
 
@@ -178,17 +189,17 @@ function addIntern() {
             <div class="card-content">
                 <div class="media-content">
                     <p class="title is-4"> ${intern.name}</p>
-                    <p class="subtitle is-6"> ${intern.email}</p>
-                </div>
+                    <p class subtitle is-6> ${intern.getRole()}</p>
                 <div class="content">
-                    <ul>
-                        <li>ID: ${intern.id}</li>
-                        <li>Office Number: ${intern.github}</li>
-                    </ul>
+                    <a href="mailto:${intern.email}">Email: ${intern.email}</a>
+                    <br>
+                    <p>ID: ${intern.id}</p>
+                    <br>
+                    <p>School: ${intern.school}</p>
                 </div>
             </div>
             </div>`, (err) =>
-                err ? console.error(err) : console.log("HTML written succesfully"))
+                err ? console.error(err) : console.log())
         })
 }
 
