@@ -17,6 +17,7 @@
 
   ## Usage
   Answer the prompts to add a manager to the team and then choose to add an engineer, an intern, or finish your team. You can add as many engineers or interns as required.
+  ![Demo gif of Team Profile Generator](./assets/images/team-profile-generator-demo.gif)
 
   ## License
   Copyright 2022 Alex Hageman
